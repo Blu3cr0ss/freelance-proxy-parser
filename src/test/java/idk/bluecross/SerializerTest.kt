@@ -1,0 +1,21 @@
+package idk.bluecross
+
+import com.fasterxml.jackson.databind.ObjectMapper
+import idk.bluecross.parser.ApiKeysList
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+
+@SpringBootTest
+class SerializerTest {
+    @Autowired
+    lateinit var mapper: ObjectMapper
+
+    @Test
+    fun test() {
+        val str = "IVDj8QEm54ZtZp7bDIUuNtXa01QK3xR4\n3eCfhxD0rxgzT7LexyFdDi088Ui3gtDp\nobVvdu0RVGLsJLSEYeLhOQnCk42vivWx\n6FhKzdWnUq3ow45kU2OyjFxzfFopsapM\n6AOOigSneRLQHgBnN5QTnu5MFHermCMg\nL5PzPk5F7RFjE5svh2Xq252CVvRNzKX3\nKHgwSgbpd3qgzbpQNoc6BDQAReIKCgzX\nva1IuWFlr8UfMY9jEcagOjSl58IpCrMD\nbKzoHTz8JBdTA6C7X8iQ9zqnAuiOt8nn\nd57AHTTy8U7kfyx0te0dZHYlCIeP4apD\nAb9E6eGqxQz8Wq7YCSABwcE8APAWhDbI\nsscyw9XE2oJ4NHZuNieY4B9rUJMFQBB6\nSoXlcWw1TpuliyWOsLsjc3J9xs7FbNlQ\nqzUgShjlff4q2SUB5eZO8yhQxAUnm9da\nuaXj6IBziGUsUHFBoZrWKgmm9q4c4J6V\nF2hHm5q6uhQ7rD29nEzZefSY7ZyaYXzT\nsVGj49CAJTQB2DaVC0s2ynihCAJVd4lh\nHjrWyFpoCbW87dIo3Q8MRjyMSEcX48ZY\nslyNVDJnKnajKLOjR2qq8dEPwknnaDVS\nLDgiBsychgMofArbPvzyLYBayWyaBv6e\nUpaRzhtcwQ0WBPf1A9ywWAkuYhvfeFyJ\nL2f8fXdYIxcmJqwZFB1e06gQnopGZZ46\nfacQpH0zuJbSGkuioAMP7PMgbK0VeVsq\nhTgU8pC9zum8c3YwSXx0RJfAPw8ULjao\n6tN65uGNt0zWaMk1dkcLQaAlRmHfRbvp\nCTtyuLscxZUfuLZkrhFAFTS1pOs8FN8L\nzom346n5MBPRwkXyfY5vuvHbvdC5dOww\n8jTrl6XZjhCO0vAvpM6EF1XNTj0PdDWe\n4ByVeHGSUYMhu1by1Ig8mCYDXewkm21U\nFglZknGKakRxq2dUUj7ObXVv0A0bGu02\naKB4xIXCiOHm927vRKDzMWaAd2aEMjkW\n3QlQq8r7AYlHtutWaSbUAX5QHJsimVYi\nVeYNcU8BI0zW7PwT3o4bdu03fSFx3bJz\nXFg5phCvHVFJZoYqYsZsbdVpFmBHK29Z\nr5KLpAKS3Gi3Qkw4hV29Bjg2i1luTJFi\n19m0ZUhkR2URS06nCLAzW29e0MJq20bQ\nZ7bDXfvbSrMj17OjpT02L3jZC5ix3dgy\nMcJdDJtJ87xjqmZ4Mt56HEo5D5QuuXUg\nxfBSqD1MFriQQW8fmS24N6qKCGo0w2PG\nKpStBAa3xq5zEYeVkM6yuPWxHvEwRjBs\nJjipoWexKXTOQ4znVE0y56ZIdgRJf1xt\nd0n9WSUL3iy3AkmuXtJujJKOa0KCVEoU\nMuqkT6TV85dqpbI3fe6Vk9k0ypgWXag8\nQO5UQVgsyFfnBBJ36uNik9tgIAMDX9LB"
+        val keylist = ApiKeysList(str)
+        println(mapper.writeValueAsString(keylist))
+        println(mapper.readValue(mapper.writeValueAsString(keylist), ApiKeysList::class.java))
+    }
+}
