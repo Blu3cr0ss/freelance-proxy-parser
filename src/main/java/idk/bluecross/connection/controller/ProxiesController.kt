@@ -21,7 +21,7 @@ class ProxiesController {
         BusyProxyService.take(proxy)
     }
 
-    @PostMapping("giveBack")
+    @PostMapping("/giveBack")
     fun giveBack(@RequestBody proxy: String) {
         BusyProxyService.giveBack(proxy)
     }

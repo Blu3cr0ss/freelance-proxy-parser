@@ -1,5 +1,5 @@
+import { MaybePromise } from "@reduxjs/toolkit/dist/query/tsHelpers";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-// import type { Pokemon } from './types';
 
 // Define a service using a base URL and expected endpoints
 export type BlackListType = {
@@ -8,8 +8,21 @@ export type BlackListType = {
   matchType: string;
 };
 
+export type ParseRequest = {
+  proxy: string;
+  apiKeys: string;
+  blackList: string[];
+  maxFraudScore: number;
+};
+
+export type ParseResponse = {
+  ip: string;
+  fraudScore: number;
+  fakeIp: string;
+};
+
 export const settingsApi = createApi({
-  tagTypes: ["blacklists"],
+  tagTypes: ["blacklists", "parseResult"],
   reducerPath: "settings",
   baseQuery: fetchBaseQuery({ baseUrl: process.env.BASE_URL }),
   endpoints: (builder) => ({
@@ -18,7 +31,10 @@ export const settingsApi = createApi({
       providesTags: ["blacklists"],
     }),
     getBlackList: builder.query<unknown, string>({
-      query: (qqq) => `blacklist`,
+      query: (name) => ({
+        url: `blacklist/get`,
+        body: name,
+      }),
     }),
     deleteBlackList: builder.mutation<unknown, string>({
       query: (name) => ({
@@ -32,7 +48,7 @@ export const settingsApi = createApi({
       // note: an optional `queryFn` may be used in place of `query`
       query: (blackList) => ({
         url: `blacklist/save`,
-        method: "post",
+        method: "POST",
         body: blackList,
       }),
       invalidatesTags: ["blacklists"],

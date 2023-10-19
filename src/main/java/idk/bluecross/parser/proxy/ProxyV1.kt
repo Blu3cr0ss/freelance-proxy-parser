@@ -44,7 +44,7 @@ class ProxyV1(override val stringRepresentation: String) : AbstractProxy(stringR
             }
         } catch (e: Exception) {
             println("$stringRepresentation: ошибка соединения")
-            e.printStackTrace()
+//            e.printStackTrace()
         }
         return realProxy
     }

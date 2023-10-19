@@ -5,17 +5,25 @@ import s from "./Parser.module.css";
 // import { selectCount } from './parserSlice';
 import { Result } from "./result";
 import { Settings } from "./settings";
+import {
+  apiKeysStringSelector,
+  enabledBlackListsSelector,
+  ipStringSelector,
+} from "../../app/settingsData/settingsData";
+import { useAppSelector } from "../../app/hooks";
+import { fetchData, resultDataSelector } from "../../app/resultData/resultData";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../app/store";
 
 export function Parser() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(true);
+  const dispatch = useDispatch<AppDispatch>();
 
   let [value, setValue] = useState(true);
 
-  // const count = useAppSelector(selectCount);
-  // const dispatch = useAppDispatch();
-  // const [incrementAmount, setIncrementAmount] = useState('2');
-
-  // const incrementValue = Number(incrementAmount) || 0;
+  const ipString = useAppSelector(ipStringSelector);
+  const apiKeys = useAppSelector(apiKeysStringSelector);
+  const blackLists = useAppSelector(enabledBlackListsSelector);
 
   return (
     <div className="wrapper">
@@ -28,7 +36,17 @@ export function Parser() {
           <Box>
             <Button
               variant="contained"
-              onClick={() => setIsSettingsOpen(false)}
+              onClick={() => {
+                setIsSettingsOpen(false);
+                dispatch(
+                  fetchData({
+                    proxy: ipString,
+                    apiKeys,
+                    blackList: blackLists,
+                    maxFraudScore: 100,
+                  })
+                );
+              }}
             >
               Запустить
             </Button>

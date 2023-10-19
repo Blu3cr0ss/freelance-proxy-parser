@@ -31,6 +31,8 @@ import {
   useUpdatePostMutation,
   useDeleteBlackListMutation,
 } from "./api";
+import { enabledBlackLists } from "../../../app/settingsData/settingsData";
+import { useAppDispatch } from "../../../app/hooks";
 
 export const BlackList: FC<BoxProps> = ({ sx }) => {
   const { data: blackLists, error, isLoading } = useGetBlackListsQuery("");
@@ -43,6 +45,14 @@ export const BlackList: FC<BoxProps> = ({ sx }) => {
   const [ipString, setIpString] = useState("");
   const [updatePost] = useUpdatePostMutation();
   const [deletePost] = useDeleteBlackListMutation();
+
+  const dispatch = useAppDispatch();
+
+  function switchBlackList(enabled: boolean, name: string) {
+    if (enabled) dispatch(enabledBlackLists.actions.add(name));
+    else dispatch(enabledBlackLists.actions.remove(name));
+  }
+
   function saveBlacklist() {
     updatePost({ name, ipString, matchType });
   }
@@ -102,6 +112,7 @@ export const BlackList: FC<BoxProps> = ({ sx }) => {
         <RadioGroup
           label={"Совпадение"}
           value={matchType}
+          defaultValue={"OCTET2"}
           onChange={(e) => setMatchType((e.target as HTMLInputElement).value)}
           sx={{ gridArea: "type", mt: "4vh" }}
         >
@@ -109,6 +120,7 @@ export const BlackList: FC<BoxProps> = ({ sx }) => {
             value="OCTET2"
             control={<Radio />}
             label="По второму октету"
+            defaultChecked
           />
           <FormControlLabel
             value="OCTET3"
@@ -142,7 +154,11 @@ export const BlackList: FC<BoxProps> = ({ sx }) => {
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell align="center">
-                    <Switch />
+                    <Switch
+                      onChange={(e) =>
+                        switchBlackList(e.target.checked, row.name)
+                      }
+                    />
                   </TableCell>
                   <TableCell align="center">
                     <FormControl fullWidth>

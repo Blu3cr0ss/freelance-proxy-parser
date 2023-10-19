@@ -39,44 +39,40 @@ export const resultDataSelector = (state: RootState) => state?.resultData;
 const { addResultData, clearResultData, setIsLoading, setIsLoaded, setError } =
   resultData.actions;
 
-let url = "localhost:8080/api/parser/parse";
+let url = "http://localhost:8080/api/parser/parse";
 
 export const fetchData = createAsyncThunk(
   "resultData",
-  async (body: string, { dispatch, getState }) => {
+  async (body: any, { dispatch, getState }) => {
+    dispatch(clearResultData());
+
     fetchEventSource(url, {
       method: "post",
       headers: {
         Accept: "text/event-stream",
-        // Accept: "application/stream+json",
-        // "Content-Type": "application/json",
+        "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
       },
 
-      body: "JSON.stringify(body)",
+      body: JSON.stringify(body),
       onmessage(ev) {
-        console.log("data ---> " + ev.data);
+        console.log(JSON.parse(ev.data));
 
-        // dispatch(addResultData(JSON.parse(ev.data)));
+        dispatch(addResultData(JSON.parse(ev.data)));
       },
       onclose() {
-        // dispatch(setIsLoading(false));
-        // dispatch(setIsLoaded(true));
+        dispatch(setIsLoading(false));
+        dispatch(setIsLoaded(true));
       },
       onopen(res) {
-        console.log("res ---> " + res);
-        console.log("body ---> " + body);
-
-        // dispatch(clearResultData());
-        // dispatch(setIsLoading(true));
-        // dispatch(setIsLoaded(false));
+        dispatch(setIsLoading(true));
+        dispatch(setIsLoaded(false));
         return new Promise((resolve) => resolve());
       },
       onerror(err) {
-        // dispatch(clearResultData());
-        // dispatch(setIsLoading(false));
-        // dispatch(setIsLoaded(false));
-        // dispatch(setError(err));
+        dispatch(setIsLoading(false));
+        dispatch(setIsLoaded(false));
+        dispatch(setError(err));
         throw err;
       },
     }).catch((e) => {
@@ -84,3 +80,44 @@ export const fetchData = createAsyncThunk(
     });
   }
 );
+
+// async (body: string, { dispatch, getState }) => {
+//   fetchEventSource(url, {
+//     method: "post",
+//     headers: {
+//       Accept: "text/event-stream",
+//       // Accept: "application/stream+json",
+//       // "Content-Type": "application/json",
+//       "Access-Control-Allow-Origin": "*",
+//     },
+
+//     body: "JSON.stringify(body)",
+//     onmessage(ev) {
+//       console.log("data ---> " + ev.data);
+
+//       // dispatch(addResultData(JSON.parse(ev.data)));
+//     },
+//     onclose() {
+//       // dispatch(setIsLoading(false));
+//       // dispatch(setIsLoaded(true));
+//     },
+//     onopen(res) {
+//       console.log("res ---> " + res);
+//       console.log("body ---> " + body);
+
+//       // dispatch(clearResultData());
+//       // dispatch(setIsLoading(true));
+//       // dispatch(setIsLoaded(false));
+//       return new Promise((resolve) => resolve());
+//     },
+//     onerror(err) {
+//       // dispatch(clearResultData());
+//       // dispatch(setIsLoading(false));
+//       // dispatch(setIsLoaded(false));
+//       // dispatch(setError(err));
+//       throw err;
+//     },
+//   }).catch((e) => {
+//     console.error("error in fetchEventSource ---> " + e);
+//   });
+// }

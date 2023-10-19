@@ -33,7 +33,7 @@ class ProxyV2(override val stringRepresentation: String) : AbstractProxy(stringR
                 println("Прокси ${stringRepresentation} вернул ошибку 429 - слишком много запросов")
         } catch (e: Exception) {
             println("$stringRepresentation: ошибка соединения")
-            e.printStackTrace()
+//            e.printStackTrace()
         }
         return realProxy
     }

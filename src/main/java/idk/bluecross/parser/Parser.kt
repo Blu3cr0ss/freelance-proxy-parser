@@ -4,6 +4,7 @@ import idk.bluecross.GlobalSettings
 import idk.bluecross.connection.service.BlackListService
 import idk.bluecross.connection.service.BusyProxyService
 import idk.bluecross.parser.proxy.AbstractProxy
+import idk.bluecross.parser.proxy.RealProxy
 import idk.bluecross.util.DIUtil
 import reactor.core.publisher.Flux
 import reactor.core.scheduler.Schedulers
@@ -99,11 +100,11 @@ class Parser(
 
     }
 
-    fun parse(): Flux<AbstractProxy.RealProxy> {
+    fun parse(): Flux<RealProxy> {
         proxyFlux = filterBlacklist()
         proxyFlux = filterFraudScore(maxFraudScore)
         proxyFlux = filterBusy()
-        proxyFlux = proxyFlux.distinct(AbstractProxy.RealProxy::ip)
+        proxyFlux = proxyFlux
 
         return proxyFlux
     }
